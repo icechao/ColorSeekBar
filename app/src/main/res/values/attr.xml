@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ColorSeekBar">
+        <attr name="bgColor" format="color" />
+        <attr name="bgWidth" format="dimension" />
+        <attr name="indexCircleWidth" format="dimension" />
+        <attr name="pointRadius" format="dimension" />
+        <attr name="indexBigRadius" format="dimension" />
+        <attr name="progressColor" format="color" />
+        <attr name="unableColor" format="color" />
+        <attr name="pliceColor" format="color" />
+        <attr name="pliceNumber" format="float" />
+        <attr name="useable" format="integer" />
+        <attr name="bgRadius" format="dimension" />
+        <attr name="dividingCount" format="integer" />
+        <attr name="cursorNormal" format="reference" />
+        <attr name="cursorUnused" format="reference" />
+        <attr name="cursorPlice" format="reference" />
+    </declare-styleable>
+</resources>
