@@ -146,8 +146,8 @@ public class ColorSeekBar extends View {
 
     private void initView(Context context) {
         this.context = context;
-        setPadding(getPaddingLeft() + progressRadius, getPaddingTop() + progressRadius,
-                getPaddingRight() + progressRadius, getPaddingBottom() + progressRadius);
+        setPadding(getPaddingLeft() + progressRadius + progressBigCircleWidth / 2, getPaddingTop() + progressRadius,
+                getPaddingRight() + progressRadius + progressBigCircleWidth / 2, getPaddingBottom() + progressRadius);
 //        cursorUnused = BitmapFactory.decodeResource(context.getResources(), R.drawable.corner_move);
 //        cursorNormal = BitmapFactory.decodeResource(context.getResources(), R.drawable.corner_move);
 //        cursorPlice = BitmapFactory.decodeResource(context.getResources(), R.drawable.corner_move);
@@ -161,6 +161,11 @@ public class ColorSeekBar extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST) {
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(progressRadius * 2 + progressBigCircleWidth, MeasureSpec.EXACTLY);
+        }
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         paddingLeft = getPaddingLeft();
         paddingRight = getPaddingRight();
