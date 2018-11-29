@@ -2,6 +2,7 @@ package com.ice.chao.demo;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,10 +10,17 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.os.Build;
+import android.support.annotation.Dimension;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
+
+import java.lang.reflect.Type;
 
 /*************************************************************************
  * 文件说明        :
@@ -35,6 +43,7 @@ public class ColorSeekBar extends View {
     public static int STATE_UNUSDED = 0;
     public static int STATE_NORMAL = 1;
 
+    private int unableColor = Color.parseColor("#FAD7D0");
     private int backgroudColor = Color.parseColor("#FAD7D0");
     private int progressColor = Color.parseColor("#EC5E45");
     private int pliceColor = Color.parseColor("#FAB213");
@@ -54,7 +63,7 @@ public class ColorSeekBar extends View {
     private Bitmap cursorNormal;
     private Bitmap cursorUnused;
     private Bitmap cursorPlice;
-    private int state;
+    private int state = STATE_NORMAL;
     private float splitMax;
 
     public void setProgress(float progress) {
@@ -129,29 +138,85 @@ public class ColorSeekBar extends View {
         this.listener = listener;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ColorSeekBar(Context context) {
         super(context);
-        initView(context);
+        initView(context, null);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ColorSeekBar(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        initView(context);
+        initView(context, attrs);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public ColorSeekBar(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        initView(context);
+        initView(context, attrs);
     }
 
-    private void initView(Context context) {
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void initView(Context context, AttributeSet attrs) {
         this.context = context;
+        if (null == attrs) {
+            return;
+        }
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ColorSeekBar);
+        int indexCount = typedArray.getIndexCount();
+        for (int i = 0; i < indexCount; i++) {
+            int type = typedArray.getIndex(i);
+            switch (type) {
+                case R.styleable.ColorSeekBar_bgColor:
+                    backgroudColor = typedArray.getColor(type, backgroudColor);
+                    break;
+                case R.styleable.ColorSeekBar_bgWidth:
+                    standerdCircleWidth = typedArray.getDimensionPixelSize(type, standerdCircleWidth);
+                    break;
+                case R.styleable.ColorSeekBar_indexCircleWidth:
+                    progressBigCircleWidth = typedArray.getDimensionPixelSize(type, progressBigCircleWidth);
+                    break;
+                case R.styleable.ColorSeekBar_indexBigRadius:
+                    progressRadius = typedArray.getDimensionPixelSize(type, progressRadius);
+                    break;
+                case R.styleable.ColorSeekBar_progressColor:
+                    progressColor = typedArray.getColor(type, progressColor);
+                    break;
+                case R.styleable.ColorSeekBar_unableColor:
+                    unableColor = typedArray.getColor(type, unableColor);
+                    break;
+                case R.styleable.ColorSeekBar_pliceColor:
+                    pliceColor = typedArray.getColor(type, pliceColor);
+                    break;
+                case R.styleable.ColorSeekBar_pliceNumber:
+                    plice = typedArray.getFloat(type, plice);
+                    break;
+                case R.styleable.ColorSeekBar_useable:
+                    state = typedArray.getInt(type, state);
+                    break;
+                case R.styleable.ColorSeekBar_dividingCount:
+                    dividingCount = typedArray.getInt(type, dividingCount);
+                    break;
+                case R.styleable.ColorSeekBar_cursorNormal:
+                    cursorNormal = BitmapFactory.decodeResource(
+                            getResources(), typedArray.getResourceId(type, 0));
+                    break;
+                case R.styleable.ColorSeekBar_cursorUnused:
+                    cursorUnused = BitmapFactory.decodeResource(
+                            getResources(), typedArray.getResourceId(type, 0));
+                    break;
+                case R.styleable.ColorSeekBar_cursorPlice:
+                    cursorPlice = BitmapFactory.decodeResource(
+                            getResources(), typedArray.getResourceId(type, 0));
+                    break;
+
+            }
+
+
+        }
+        typedArray.recycle();
         setPadding(getPaddingLeft() + progressRadius + progressBigCircleWidth / 2, getPaddingTop() + progressRadius,
                 getPaddingRight() + progressRadius + progressBigCircleWidth / 2, getPaddingBottom() + progressRadius);
-//        cursorUnused = BitmapFactory.decodeResource(context.getResources(), R.drawable.corner_move);
-//        cursorNormal = BitmapFactory.decodeResource(context.getResources(), R.drawable.corner_move);
-//        cursorPlice = BitmapFactory.decodeResource(context.getResources(), R.drawable.corner_move);
-        state = STATE_NORMAL;
     }
 
     @Override

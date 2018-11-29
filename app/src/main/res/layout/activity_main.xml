@@ -11,6 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp" />
+        android:layout_marginRight="20dp"
+        app:dividingCount="5"
+        app:cursorNormal="@drawable/corner_move"
+        app:cursorUnused="@drawable/corner_move"
+        app:cursorPlice="@drawable/corner_move"
+        app:bgColor="@color/colorAccent" />
 
 </LinearLayout>
