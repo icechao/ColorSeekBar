@@ -5,6 +5,7 @@
         <attr name="bgWidth" format="dimension" />
         <attr name="indexCircleWidth" format="dimension" />
         <attr name="indexBigRadius" format="dimension" />
+        <attr name="standerdRadius" format="dimension" />
         <attr name="progressColor" format="color" />
         <attr name="unableColor" format="color" />
         <attr name="pliceColor" format="color" />

@@ -11,16 +11,11 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Build;
-import android.support.annotation.Dimension;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.lang.reflect.Type;
 
 /*************************************************************************
  * 文件说明        :
@@ -67,7 +62,7 @@ public class ColorSeekBar extends View {
     private float splitMax;
 
     public void setProgress(float progress) {
-        this.progress = progress;
+        progress = progress;
     }
 
     public void setMax(float max) {
@@ -83,7 +78,7 @@ public class ColorSeekBar extends View {
     }
 
     public void setProgressColor(int progressColor) {
-        this.progressColor = progressColor;
+        progressColor = progressColor;
     }
 
     public void setStanderdRadius(int standerdRadius) {
@@ -103,7 +98,7 @@ public class ColorSeekBar extends View {
     }
 
     public void setProgressRadius(int progressRadius) {
-        this.progressRadius = progressRadius;
+        progressRadius = progressRadius;
     }
 
     public void setFillColor(int fillColor) {
@@ -115,7 +110,7 @@ public class ColorSeekBar extends View {
     }
 
     public void setProgressBigCircleWidth(int progressBigCircleWidth) {
-        this.progressBigCircleWidth = progressBigCircleWidth;
+        progressBigCircleWidth = progressBigCircleWidth;
     }
 
     public void setCursorNormal(int cursorNormal) {
@@ -173,6 +168,9 @@ public class ColorSeekBar extends View {
                 case R.styleable.ColorSeekBar_bgWidth:
                     standerdCircleWidth = typedArray.getDimensionPixelSize(type, standerdCircleWidth);
                     break;
+                case R.styleable.ColorSeekBar_standerdRadius:
+                    standerdRadius = typedArray.getDimensionPixelSize(type, standerdRadius);
+                    break;
                 case R.styleable.ColorSeekBar_indexCircleWidth:
                     progressBigCircleWidth = typedArray.getDimensionPixelSize(type, progressBigCircleWidth);
                     break;
@@ -215,14 +213,66 @@ public class ColorSeekBar extends View {
 
         }
         typedArray.recycle();
+        splitMax = max / 100;
+        setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (0 == max) {
+                    return true;
+                }
+                if (state == STATE_UNUSDED) {
+                    return true;
+                }
+                float downX;
+                int change = 0;
+                downX = event.getX();
+
+                if (downX <= paddingLeft) {
+                    while (progress > 0) {
+                        progress -= splitMax;
+                        invalidate();
+                    }
+                    progress = 0;
+                    change = 0;
+                } else if (downX >= (width - paddingRight)) {
+                    while (progress < max) {
+                        progress += splitMax;
+                        invalidate();
+                    }
+                    progress = max;
+                    change = 100;
+                } else {
+                    float v = (downX - paddingLeft) / contentWidth;
+                    change = (int) (v * 100);
+                    float newProgress = max * change / 100f;
+                    if (change > precent) {
+                        while (progress < newProgress) {
+                            progress += splitMax;
+                            invalidate();
+                        }
+                    } else if (change < precent) {
+                        while (progress > newProgress) {
+                            progress -= splitMax;
+                            invalidate();
+                        }
+                    }
+//                progress = max * v;高精度计算
+                    progress = newProgress;//精确两位小数
+                }
+
+                if (null != listener && change != precent) {
+                    listener.change(max, progress, plice, change / 100f);
+                }
+
+                precent = change;
+                invalidate();
+                return true;
+            }
+        });
         setPadding(getPaddingLeft() + progressRadius + progressBigCircleWidth / 2, getPaddingTop() + progressRadius,
                 getPaddingRight() + progressRadius + progressBigCircleWidth / 2, getPaddingBottom() + progressRadius);
     }
 
-    @Override
-    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
-    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -365,8 +415,8 @@ public class ColorSeekBar extends View {
                     0, 360, true, paint);
         }
         float tempWidth = dividingWidth * plicePointCount;
-        if (pliceWidth - tempWidth > standerdRadius) {
-            path.lineTo((pliceWidth + paddingLeft), height / 2);
+        if (pliceWidth - tempWidth >= standerdRadius) {
+            path.lineTo(((pliceWidth + paddingLeft > tempWidth - standerdRadius ? tempWidth - standerdRadius : pliceWidth + paddingLeft)), height / 2);
             tempWidth = pliceWidth;
         } else {
             tempWidth += (standerdRadius) + standerdCircleWidth / 2;
@@ -490,64 +540,6 @@ public class ColorSeekBar extends View {
                 0, 360, true, paint);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (0 == max) {
-            return false;
-        }
-        if (state == STATE_UNUSDED) {
-            return false;
-        }
-        splitMax = max / 300;
-        float downX;
-        int change = 0;
-        downX = event.getX();
-
-        if (downX <= paddingLeft) {
-            while (this.progress > 0) {
-                this.progress -= splitMax;
-                invalidate();
-            }
-            this.progress = 0;
-            change = 0;
-            precent = 0;
-        } else if (downX >= (width - paddingRight)) {
-            while (this.progress < max) {
-                this.progress += splitMax;
-                invalidate();
-            }
-            change = 100;
-            this.progress = max;
-            precent = 100;
-        } else {
-            float v = (downX - paddingLeft) / contentWidth;
-            change = (int) (v * 100);
-            float newProgress = max * change / 100f;
-            if (change > precent) {
-                while (progress < newProgress) {
-                    this.progress += splitMax;
-                    invalidate();
-                }
-            } else if (change < precent) {
-                while (progress > newProgress) {
-                    this.progress -= splitMax;
-                    invalidate();
-                }
-            }
-//                progress = max * v;高精度计算
-            this.progress = newProgress;//精确两位小数
-        }
-
-        if (null != listener && change != precent) {
-            listener.change(max, this.progress, plice, change / 100f);
-        }
-        precent = change;
-        invalidate();
-        return true;
-
-
-    }
 
     private ProgressChangeListener listener;
 
@@ -558,5 +550,12 @@ public class ColorSeekBar extends View {
 
     public interface ProgressChangeListener {
         void change(float max, float progress, float plice, float precent);
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        getParent().requestDisallowInterceptTouchEvent(true);
+        return super.dispatchTouchEvent(event);
     }
 }

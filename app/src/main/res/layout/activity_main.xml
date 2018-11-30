@@ -6,16 +6,54 @@
     android:background="#55444414"
     android:orientation="vertical">
 
-    <com.ice.chao.demo.ColorSeekBar
-        android:id="@+id/color_seek_bar"
+
+    <LinearLayout
+        android:id="@+id/frame_layout_box"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/view_left"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/text_view"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:singleLine="true" />
+
+        <View
+            android:id="@+id/view_right"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+
+
+        <com.ice.chao.demo.ColorSeekBar
+
+            android:id="@+id/color_seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            app:bgColor="@color/colorAccent"
+            app:cursorNormal="@drawable/corner_move"
+            app:cursorPlice="@drawable/corner_move"
+            app:cursorUnused="@drawable/corner_move"
+            app:dividingCount="5"
+            app:indexBigRadius="20dp"
+            app:indexCircleWidth="10dp" />
+
+    <SeekBar
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
         android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:dividingCount="5"
-        app:cursorNormal="@drawable/corner_move"
-        app:cursorUnused="@drawable/corner_move"
-        app:cursorPlice="@drawable/corner_move"
-        app:bgColor="@color/colorAccent" />
+        android:layout_marginRight="20dp" />
 
 </LinearLayout>
