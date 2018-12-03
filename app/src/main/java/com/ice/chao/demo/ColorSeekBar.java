@@ -17,6 +17,9 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+
+import java.math.BigDecimal;
+
 /*************************************************************************
  * 文件说明        :
  *
@@ -29,17 +32,17 @@ import android.view.View;
  *************************************************************************/
 public class ColorSeekBar extends View {
 
-    private int precent = 0;
+    private BigDecimal spliteNumber = BigDecimal.ZERO;
     private float progress = 0;
     private float max = 100;
-    private float plice = 49;
+    private float pliceNumber = 100;
 
 
     public static int STATE_UNUSDED = 0;
     public static int STATE_NORMAL = 1;
 
     private int unableColor = Color.parseColor("#FAD7D0");
-    private int backgroudColor = Color.parseColor("#FAD7D0");
+    private int bgColor = Color.parseColor("#FAD7D0");
     private int progressColor = Color.parseColor("#EC5E45");
     private int pliceColor = Color.parseColor("#FAB213");
     private int fillColor = Color.WHITE;
@@ -47,86 +50,174 @@ public class ColorSeekBar extends View {
     private int standerdRadius = 12;
     private int paddingLeft;
     private int paddingRight;
-    private int standerdCircleWidth = 10;
+    private int bgWidth = 10;
     private int dividingCount = 4;
-    private int progressRadius = 60;
+    private int indexBigRadius = 60;
     private float width;
     private float height;
-    private int progressBigCircleWidth = 2;
+    private int indexCircleWidth = 2;
     private float contentWidth;
     private Context context;
     private Bitmap cursorNormal;
     private Bitmap cursorUnused;
     private Bitmap cursorPlice;
-    private int state = STATE_NORMAL;
+    private int useable = STATE_NORMAL;
     private float splitMax;
 
-    public void setProgress(float progress) {
-        progress = progress;
+
+    public int getUnableColor() {
+        return unableColor;
     }
 
-    public void setMax(float max) {
-        this.max = max;
+    public void setUnableColor(int unableColor) {
+        this.unableColor = unableColor;
+        invalidate();
     }
 
-    public void setPlice(float plice) {
-        this.plice = plice;
+    public int getBgColor() {
+        return bgColor;
     }
 
-    public void setBackgroudColor(int backgroudColor) {
-        this.backgroudColor = backgroudColor;
+    public void setBgColor(int bgColor) {
+        this.bgColor = bgColor;
+        invalidate();
+    }
+
+    public int getProgressColor() {
+        return progressColor;
     }
 
     public void setProgressColor(int progressColor) {
-        progressColor = progressColor;
+        this.progressColor = progressColor;
+        invalidate();
+
     }
 
-    public void setStanderdRadius(int standerdRadius) {
-        this.standerdRadius = standerdRadius;
-    }
-
-    public void setPaddingLeft(int paddingLeft) {
-        this.paddingLeft = paddingLeft;
-    }
-
-    public void setPaddingRight(int paddingRight) {
-        this.paddingRight = paddingRight;
-    }
-
-    public void setStanderdCircleWidth(int standerdCircleWidth) {
-        this.standerdCircleWidth = standerdCircleWidth;
-    }
-
-    public void setProgressRadius(int progressRadius) {
-        progressRadius = progressRadius;
-    }
-
-    public void setFillColor(int fillColor) {
-        this.fillColor = fillColor;
+    public int getPliceColor() {
+        return pliceColor;
     }
 
     public void setPliceColor(int pliceColor) {
         this.pliceColor = pliceColor;
+        invalidate();
     }
 
-    public void setProgressBigCircleWidth(int progressBigCircleWidth) {
-        progressBigCircleWidth = progressBigCircleWidth;
+    public int getFillColor() {
+        return fillColor;
     }
 
-    public void setCursorNormal(int cursorNormal) {
-        this.cursorNormal = BitmapFactory.decodeResource(context.getResources(), cursorNormal);
+    public void setFillColor(int fillColor) {
+        this.fillColor = fillColor;
+        invalidate();
     }
 
-    public void setCursorUnused(int cursorUnused) {
-        this.cursorUnused = BitmapFactory.decodeResource(context.getResources(), cursorUnused);
+    public int getStanderdRadius() {
+        return standerdRadius;
     }
 
-    public void setCursorPlice(int cursorPlice) {
-        this.cursorPlice = BitmapFactory.decodeResource(context.getResources(), cursorPlice);
+    public void setStanderdRadius(int standerdRadius) {
+        this.standerdRadius = standerdRadius;
+        invalidate();
     }
 
-    public void setState(int state) {
-        this.state = state;
+    public int getBgWidth() {
+        return bgWidth;
+    }
+
+    public void setBgWidth(int bgWidth) {
+        this.bgWidth = bgWidth;
+        invalidate();
+    }
+
+    public int getDividingCount() {
+        return dividingCount;
+    }
+
+    public void setDividingCount(int dividingCount) {
+        this.dividingCount = dividingCount;
+        invalidate();
+    }
+
+    public int getIndexBigRadius() {
+        return indexBigRadius;
+    }
+
+    public void setIndexBigRadius(int indexBigRadius) {
+        this.indexBigRadius = indexBigRadius;
+        invalidate();
+    }
+
+    public int getIndexCircleWidth() {
+        return indexCircleWidth;
+    }
+
+    public void setIndexCircleWidth(int indexCircleWidth) {
+        this.indexCircleWidth = indexCircleWidth;
+        invalidate();
+    }
+
+    public Bitmap getCursorNormal() {
+        return cursorNormal;
+    }
+
+    public void setCursorNormal(Bitmap cursorNormal) {
+        this.cursorNormal = cursorNormal;
+        invalidate();
+    }
+
+    public Bitmap getCursorUnused() {
+        return cursorUnused;
+    }
+
+    public void setCursorUnused(Bitmap cursorUnused) {
+        this.cursorUnused = cursorUnused;
+        invalidate();
+    }
+
+    public Bitmap getCursorPlice() {
+        return cursorPlice;
+    }
+
+    public void setCursorPlice(Bitmap cursorPlice) {
+        this.cursorPlice = cursorPlice;
+        invalidate();
+    }
+
+    public int getUseable() {
+        return useable;
+    }
+
+    public void setUseable(int useable) {
+        this.useable = useable;
+        invalidate();
+    }
+
+    public void setProgress(String string) {
+        try {
+            progress = new BigDecimal(string).divide(spliteNumber, 0, BigDecimal.ROUND_HALF_UP).floatValue();
+        } catch (Exception e) {
+            progress = 0f;
+        }
+        if (progress > 100) {
+            progress = 100;
+        }
+        if (progress < 0) {
+            progress = 0;
+        }
+        invalidate();
+        if (null != listener && spliteNumber.compareTo(BigDecimal.ZERO) != 0) {
+            listener.setProgress(progress / 100);
+        }
+    }
+
+    public void setMax(String string) {
+
+        try {
+            spliteNumber = new BigDecimal(string).divide(new BigDecimal(100));
+        } catch (Exception e) {
+            spliteNumber = BigDecimal.ONE;
+        }
+        invalidate();
     }
 
     public void setListener(ProgressChangeListener listener) {
@@ -163,19 +254,19 @@ public class ColorSeekBar extends View {
             int type = typedArray.getIndex(i);
             switch (type) {
                 case R.styleable.ColorSeekBar_bgColor:
-                    backgroudColor = typedArray.getColor(type, backgroudColor);
+                    bgColor = typedArray.getColor(type, bgColor);
                     break;
                 case R.styleable.ColorSeekBar_bgWidth:
-                    standerdCircleWidth = typedArray.getDimensionPixelSize(type, standerdCircleWidth);
+                    bgWidth = typedArray.getDimensionPixelSize(type, bgWidth);
                     break;
                 case R.styleable.ColorSeekBar_standerdRadius:
                     standerdRadius = typedArray.getDimensionPixelSize(type, standerdRadius);
                     break;
                 case R.styleable.ColorSeekBar_indexCircleWidth:
-                    progressBigCircleWidth = typedArray.getDimensionPixelSize(type, progressBigCircleWidth);
+                    indexCircleWidth = typedArray.getDimensionPixelSize(type, indexCircleWidth);
                     break;
                 case R.styleable.ColorSeekBar_indexBigRadius:
-                    progressRadius = typedArray.getDimensionPixelSize(type, progressRadius);
+                    indexBigRadius = typedArray.getDimensionPixelSize(type, indexBigRadius);
                     break;
                 case R.styleable.ColorSeekBar_progressColor:
                     progressColor = typedArray.getColor(type, progressColor);
@@ -187,10 +278,10 @@ public class ColorSeekBar extends View {
                     pliceColor = typedArray.getColor(type, pliceColor);
                     break;
                 case R.styleable.ColorSeekBar_pliceNumber:
-                    plice = typedArray.getFloat(type, plice);
+                    pliceNumber = typedArray.getFloat(type, pliceNumber);
                     break;
                 case R.styleable.ColorSeekBar_useable:
-                    state = typedArray.getInt(type, state);
+                    useable = typedArray.getInt(type, useable);
                     break;
                 case R.styleable.ColorSeekBar_dividingCount:
                     dividingCount = typedArray.getInt(type, dividingCount);
@@ -207,6 +298,20 @@ public class ColorSeekBar extends View {
                     cursorPlice = BitmapFactory.decodeResource(
                             getResources(), typedArray.getResourceId(type, 0));
                     break;
+                case R.styleable.ColorSeekBar_max:
+                    try {
+                        spliteNumber = new BigDecimal(typedArray.getString(type)).divide(new BigDecimal(100));
+                    } catch (Exception e) {
+                        spliteNumber = BigDecimal.ONE;
+                    }
+                    break;
+                case R.styleable.ColorSeekBar_progress:
+                    try {
+                        progress = new BigDecimal(typedArray.getString(type)).divide(spliteNumber, 0, BigDecimal.ROUND_DOWN).floatValue();
+                    } catch (Exception e) {
+                        progress = 0f;
+                    }
+                    break;
 
             }
 
@@ -217,60 +322,48 @@ public class ColorSeekBar extends View {
         setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
-                if (0 == max) {
+                float change = progress;
+                if (0 == max || spliteNumber.compareTo(BigDecimal.ZERO) == 0) {
                     return true;
                 }
-                if (state == STATE_UNUSDED) {
+                if (useable == STATE_UNUSDED) {
                     return true;
                 }
                 float downX;
-                int change = 0;
                 downX = event.getX();
-
                 if (downX <= paddingLeft) {
                     while (progress > 0) {
                         progress -= splitMax;
                         invalidate();
                     }
-                    progress = 0;
-                    change = 0;
+
                 } else if (downX >= (width - paddingRight)) {
                     while (progress < max) {
                         progress += splitMax;
                         invalidate();
                     }
-                    progress = max;
-                    change = 100;
                 } else {
                     float v = (downX - paddingLeft) / contentWidth;
-                    change = (int) (v * 100);
-                    float newProgress = max * change / 100f;
-                    if (change > precent) {
-                        while (progress < newProgress) {
-                            progress += splitMax;
-                            invalidate();
-                        }
-                    } else if (change < precent) {
-                        while (progress > newProgress) {
-                            progress -= splitMax;
-                            invalidate();
-                        }
+                    int newProgress = (int) (v * 100f + 0.5f);
+                    while (progress < newProgress) {
+                        progress += splitMax;
+                        invalidate();
                     }
-//                progress = max * v;高精度计算
-                    progress = newProgress;//精确两位小数
+                    while (progress > newProgress) {
+                        progress -= splitMax;
+                        invalidate();
+                    }
                 }
 
-                if (null != listener && change != precent) {
-                    listener.change(max, progress, plice, change / 100f);
+                if (null != listener && progress != change) {
+                    listener.change(progress / 100);
                 }
-
-                precent = change;
                 invalidate();
                 return true;
             }
         });
-        setPadding(getPaddingLeft() + progressRadius + progressBigCircleWidth / 2, getPaddingTop() + progressRadius,
-                getPaddingRight() + progressRadius + progressBigCircleWidth / 2, getPaddingBottom() + progressRadius);
+        setPadding(getPaddingLeft() + indexBigRadius + indexCircleWidth / 2, getPaddingTop() + indexBigRadius,
+                getPaddingRight() + indexBigRadius + indexCircleWidth / 2, getPaddingBottom() + indexBigRadius);
     }
 
 
@@ -278,7 +371,7 @@ public class ColorSeekBar extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         if (MeasureSpec.getMode(heightMeasureSpec) == MeasureSpec.AT_MOST) {
-            heightMeasureSpec = MeasureSpec.makeMeasureSpec(progressRadius * 2 + progressBigCircleWidth, MeasureSpec.EXACTLY);
+            heightMeasureSpec = MeasureSpec.makeMeasureSpec(indexBigRadius * 2 + indexCircleWidth, MeasureSpec.EXACTLY);
         }
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -295,9 +388,9 @@ public class ColorSeekBar extends View {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
         float dividingWidth = (canvas.getWidth() - paddingLeft - paddingRight) / dividingCount;
-        paint.setColor(backgroudColor);
+        paint.setColor(bgColor);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(standerdCircleWidth);
+        paint.setStrokeWidth(bgWidth);
         drawBackground(canvas, paint, dividingWidth);
         drawProgress(canvas, paint, dividingWidth);
     }
@@ -311,7 +404,7 @@ public class ColorSeekBar extends View {
      */
     private void drawProgress(Canvas canvas, Paint paint, float dividingWidth) {
 
-        if (state == STATE_UNUSDED) {
+        if (useable == STATE_UNUSDED) {
             drawCurrent(canvas, paint, 0, cursorUnused);
             return;
         }
@@ -322,17 +415,17 @@ public class ColorSeekBar extends View {
         if (progress > max) {
             progress = max;
         }
-        if (plice > max) {
-            plice = max;
+        if (pliceNumber > max) {
+            pliceNumber = max;
         }
         float progressWidth = contentWidth / max * progress;
         paint.setColor(progressColor);
-        if (progress <= plice) {
+        if (progress <= pliceNumber) {
             drawProgressNormal(canvas, paint, dividingWidth, progressWidth);
             drawCurrent(canvas, paint, progressWidth, cursorNormal);
             return;
         }
-        float pliceWidth = contentWidth / max * plice;
+        float pliceWidth = contentWidth / max * pliceNumber;
         Path path = new Path();
         path.moveTo(paddingLeft + standerdRadius, height / 2);
         int plicePointCount = (int) (pliceWidth / dividingWidth);
@@ -368,8 +461,8 @@ public class ColorSeekBar extends View {
                     0, 360, true, paint);
         }
         tempWidth = dividingWidth * progressPointCount;
-        if (progressWidth - tempWidth > progressRadius) {
-            path.lineTo(progressWidth + paddingLeft - progressBigCircleWidth / 2, height / 2);
+        if (progressWidth - tempWidth > indexBigRadius) {
+            path.lineTo(progressWidth + paddingLeft - indexCircleWidth / 2, height / 2);
         }
         canvas.drawPath(path, paint);
         drawCurrent(canvas, paint, progressWidth, cursorPlice);
@@ -385,10 +478,10 @@ public class ColorSeekBar extends View {
     private void drawPartTwo(Canvas canvas, Paint paint, float progressWidth, float pliceWidth, float tempWidth) {
         Path path;
         paint.setColor(pliceColor);
-        if (progressWidth - pliceWidth > progressRadius) {
+        if (progressWidth - pliceWidth > indexBigRadius) {
             path = new Path();
             path.moveTo(tempWidth + paddingLeft, height / 2);
-            path.lineTo(paddingLeft + progressWidth - progressBigCircleWidth / 2, height / 2);
+            path.lineTo(paddingLeft + progressWidth - indexCircleWidth / 2, height / 2);
             canvas.drawPath(path, paint);
         }
         drawCurrent(canvas, paint, progressWidth, cursorPlice);
@@ -415,19 +508,24 @@ public class ColorSeekBar extends View {
                     0, 360, true, paint);
         }
         float tempWidth = dividingWidth * plicePointCount;
-        if (pliceWidth - tempWidth >= standerdRadius) {
-            path.lineTo(((pliceWidth + paddingLeft > tempWidth - standerdRadius ? tempWidth - standerdRadius : pliceWidth + paddingLeft)), height / 2);
+        if (pliceWidth - tempWidth > standerdRadius) {
+            float nextWidth = tempWidth + dividingWidth;
+            if (nextWidth - standerdRadius < pliceWidth) {
+                path.lineTo((nextWidth + paddingLeft - standerdRadius), height / 2);
+            } else {
+                path.lineTo((pliceWidth + paddingLeft), height / 2);
+            }
             tempWidth = pliceWidth;
         } else {
-            tempWidth += (standerdRadius) + standerdCircleWidth / 2;
+            tempWidth += (standerdRadius) + bgWidth / 2;
         }
-        paint.setStrokeWidth(standerdCircleWidth);
+        paint.setStrokeWidth(bgWidth);
         canvas.drawPath(path, paint);
         return tempWidth;
     }
 
     /**
-     * draw normal progress which smaller the plice line
+     * draw normal progress which smaller the pliceline
      *
      * @param canvas
      * @param paint
@@ -447,8 +545,8 @@ public class ColorSeekBar extends View {
                             paddingLeft + standerdRadius + currentLeft, height / 2 + standerdRadius),
                     0, 360, true, paint);
         }
-        path.lineTo((float) ((paddingLeft + width) - standerdRadius - progressBigCircleWidth / 2), height / 2);
-        paint.setStrokeWidth(standerdCircleWidth);
+        path.lineTo((float) ((paddingLeft + width) - standerdRadius - indexCircleWidth / 2), height / 2);
+        paint.setStrokeWidth(bgWidth);
         canvas.drawPath(path, paint);
     }
 
@@ -462,24 +560,24 @@ public class ColorSeekBar extends View {
     private void drawCurrent(Canvas canvas, Paint paint, float progressWidth, Bitmap cursor) {
 
         if (null == cursor) {
-            if (state == STATE_UNUSDED) {
-                paint.setColor(backgroudColor);
+            if (useable == STATE_UNUSDED) {
+                paint.setColor(bgColor);
             }
-            drawCircleFill(canvas, paint, paddingLeft + progressWidth - (standerdRadius + (standerdCircleWidth / 2)), height / 2 - (standerdRadius + (standerdCircleWidth / 2)),
-                    paddingLeft + progressWidth + (standerdRadius + (standerdCircleWidth / 2)), height / 2 + (standerdRadius + (standerdCircleWidth / 2)));
+            drawCircleFill(canvas, paint, paddingLeft + progressWidth - (standerdRadius + (bgWidth / 2)), height / 2 - (standerdRadius + (bgWidth / 2)),
+                    paddingLeft + progressWidth + (standerdRadius + (bgWidth / 2)), height / 2 + (standerdRadius + (bgWidth / 2)));
 //        RadialGradient radialGradient = new RadialGradient(paddingLeft + progressWidth, height / 2, 50, paint.getColor(), Color.GRAY, Shader.TileMode.CLAMP);
-            drawCircleStroke(canvas, paint, progressBigCircleWidth, paddingLeft + progressWidth - progressRadius, height / 2 - progressRadius,
-                    paddingLeft + progressWidth + progressRadius, height / 2 + progressRadius);
+            drawCircleStroke(canvas, paint, indexCircleWidth, paddingLeft + progressWidth - indexBigRadius, height / 2 - indexBigRadius,
+                    paddingLeft + progressWidth + indexBigRadius, height / 2 + indexBigRadius);
             if (fillColor != 0) {
                 paint.setColor(fillColor);
-                int width = progressRadius - standerdRadius - progressBigCircleWidth / 2 - (standerdCircleWidth / 2);
-                int radius = ((progressRadius) + standerdRadius) / 2 + progressBigCircleWidth;
+                int width = indexBigRadius - standerdRadius - indexCircleWidth / 2 - (bgWidth / 2);
+                int radius = ((indexBigRadius) + standerdRadius) / 2 + indexCircleWidth;
                 drawCircleStroke(canvas, paint, width, paddingLeft + progressWidth - radius, height / 2 - radius,
                         paddingLeft + progressWidth + radius, height / 2 + radius);
             }
         } else {
-            canvas.drawBitmap(cursor, null, new RectF(paddingLeft + progressWidth - progressRadius, height / 2 - progressRadius,
-                    paddingLeft + progressWidth + progressRadius, height / 2 + progressRadius), paint);
+            canvas.drawBitmap(cursor, null, new RectF(paddingLeft + progressWidth - indexBigRadius, height / 2 - indexBigRadius,
+                    paddingLeft + progressWidth + indexBigRadius, height / 2 + indexBigRadius), paint);
         }
     }
 
@@ -549,7 +647,9 @@ public class ColorSeekBar extends View {
 
 
     public interface ProgressChangeListener {
-        void change(float max, float progress, float plice, float precent);
+        void change(float precent);
+
+        void setProgress(float progress);
     }
 
 

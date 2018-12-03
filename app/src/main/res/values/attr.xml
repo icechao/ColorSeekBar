@@ -15,5 +15,7 @@
         <attr name="cursorNormal" format="reference|color" />
         <attr name="cursorUnused" format="reference|color" />
         <attr name="cursorPlice" format="reference|color" />
+        <attr name="max" format="string" />
+        <attr name="progress" format="string" />
     </declare-styleable>
 </resources>
