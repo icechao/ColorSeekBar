@@ -12,5 +12,5 @@ seekbar
 
 设置超过境界值进度颜色
 
-<img src="https://github.com/icechao/ColorSeekBar/blob/master/app/demo.gif" width="500" hegiht="500" align=center />
+<img src="https://github.com/icechao/ColorSeekBar/blob/master/app/demo.gif" width="300" hegiht="500" align=center />
 
